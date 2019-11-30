@@ -1,0 +1,120 @@
+'''
+想要判断某个东西属于哪个分类，那么只需要找到最接近该东西的 K 个邻居，
+这些邻居中哪种分类占比最大，那么就认为该东西就属于这个分类。
+实践
+此处使用到 sklearn 和 numpy 两个库，
+导入数据：使用 sklearn中自带的测试数据集：鸢尾花数据。
+'''
+import numpy as np
+import matplotlib 
+import matplotlib.pyplot as plt
+from sklearn import datasets
+
+#采集 sklearn 包里面自带的鸢尾花的数据
+digits = datasets.load_iris()
+
+# 鸢尾花的种类 用 0，1，2 标识
+y = digits.target
+
+# 鸢尾花的特征，为了可视化的需求，这里只取前两个特征
+x = digits.data[:,:2]
+
+# 在2d平面上画出鸢尾花的分布情况
+#为了方便显示，我们这里只取标识为 0 和 1 两种鸢尾花的数据
+plt.scatter(x[y==0,0],x[y==0,1],color='r')
+plt.scatter(x[y==1,0],x[y==1,1],color='b')
+plt.show()
+'''
+拆分数据
+一般来说，对于数据集我们需要拆分为测试和训练 数据，
+以方便后续对训练的模型进行预测评分 
+'''
+# 将数据拆分为 测试数据 和 训练数据
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.2)
+# 显示如下图
+plt.scatter(x_train[y_train==0,0],x_train[y_train==0,1],color='r')
+plt.scatter(x_train[y_train==1,0],x_train[y_train==1,1],color='b')
+
+# 测试数据我们用 黄色显示
+plt.scatter(x_test[y_test==0,0],x_test[y_test==0,1],color='y')
+plt.scatter(x_test[y_test==1,0],x_test[y_test==1,1],color='y')
+
+plt.show()
+
+训练模型 和 评价模型
+训练好模型后，
+将测试数据代入模型进行预测，
+因为测试数据的真实值是知道的，
+这样就可以判断测试的结果是否准确.
+
+from sklearn.neighbors import KNeighborsClassifier
+
+# 使用 sklearn knn算法模型进行训练和预测
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(x_train,y_train)
+y_predict = knn.predict(x_test)
+
+# 真实数据分布情况
+plt.scatter(x[y==0,0],x[y==0,1],color='r')
+plt.scatter(x[y==1,0],x[y==1,1],color='b')
+plt.show()
+
+# 预测数据分布情况
+plt.scatter(x_train[y_train==0,0],x_train[y_train==0,1],color='r')
+plt.scatter(x_train[y_train==1,0],x_train[y_train==1,1],color='b')
+
+plt.scatter(x_test[y_predict==0,0],x_test[y_predict==0,1],color='r')
+plt.scatter(x_test[y_predict==1,0],x_test[y_predict==1,1],color='b')
+
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
